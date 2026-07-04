@@ -1,304 +1,171 @@
-# RESTful API Design
+# 📘 RESTful API Design
 
-## Project
+## 1. Overview
 
-**Task Management System**
+### Base URL
+
+```text
+/api/v1
+```
+
+### Resources
+
+* `/users`
+* `/tasks`
 
 ---
 
-# API Endpoints
+# 2. Data Model
+
+## User
+
+| Field    | Type   | Description      |
+| -------- | ------ | ---------------- |
+| id       | Long   | User ID          |
+| username | String | Username         |
+| email    | String | Email            |
+| role     | String | `ADMIN` | `USER` |
+
+## Task
+
+| Field       | Type   | Description               |
+| ----------- | ------ | ------------------------- |
+| id          | Long   | Task ID                   |
+| title       | String | Task title                |
+| description | String | Task description          |
+| priority    | String | `HIGH` | `NORMAL` | `LOW` |
+| assignedTo  | Long   | User ID                   |
 
 ---
 
-## 1. Lấy danh sách User
+# 3. RESTful API
 
-### Request
+## User APIs
 
-```
-GET /users
-```
-
-### Response
-
-```json
-[
-    {
-        "id":1,
-        "name":"John",
-        "email":"john@gmail.com",
-        "role":"USER"
-    }
-]
-```
+| Method | Endpoint           | Description       |
+| ------ | ------------------ | ----------------- |
+| GET    | `/users`           | Get all users     |
+| POST   | `/users`           | Create a new user |
+| PATCH  | `/users/{id}/role` | Update user role  |
+| DELETE | `/users/{id}`      | Delete a user     |
 
 ---
 
-## 2. Tạo User
+## Task APIs
 
-### Request
-
-```
-POST /users
-```
-
-### Body
-
-```json
-{
-    "name":"John",
-    "email":"john@gmail.com",
-    "role":"USER"
-}
-```
-
-### Validation
-
-- name không được để trống
-- email đúng định dạng
-- role phải là USER hoặc ADMIN
-
-### Response
-
-```
-201 Created
-```
+| Method | Endpoint             | Description        |
+| ------ | -------------------- | ------------------ |
+| GET    | `/tasks`             | Get all tasks      |
+| POST   | `/tasks`             | Create a new task  |
+| PATCH  | `/tasks/{id}/status` | Update task status |
+| DELETE | `/tasks/{id}`        | Delete a task      |
 
 ---
 
-## 3. Cập nhật Role User
+# 4. Search APIs
 
-### Request
+## Get tasks by priority
 
-```
-PATCH /users/{id}
-```
-
-### Body
-
-```json
-{
-    "role":"ADMIN"
-}
-```
-
-### Response
-
-```
-200 OK
-```
-
----
-
-## 4. Xóa User
-
-### Request
-
-```
-DELETE /users/{id}
-```
-
-### Response
-
-```
-204 No Content
-```
-
----
-
-## 5. Lấy danh sách Task
-
-### Request
-
-```
-GET /tasks
-```
-
-### Response
-
-```json
-[
-    {
-        "id":1,
-        "title":"Design API",
-        "priority":"HIGH",
-        "status":"TODO",
-        "userId":1
-    }
-]
-```
-
----
-
-## 6. Tạo Task
-
-### Request
-
-```
-POST /tasks
-```
-
-### Body
-
-```json
-{
-    "title":"Design API",
-    "description":"RESTful API",
-    "priority":"HIGH",
-    "status":"TODO",
-    "userId":1
-}
-```
-
-### Validation
-
-- title không được để trống
-- priority phải là LOW, MEDIUM hoặc HIGH
-- status hợp lệ
-- userId phải tồn tại trong hệ thống
-
-### Response
-
-```
-201 Created
-```
-
----
-
-## 7. Cập nhật trạng thái Task
-
-### Request
-
-```
-PATCH /tasks/{id}
-```
-
-### Body
-
-```json
-{
-    "status":"DONE"
-}
-```
-
-### Response
-
-```
-200 OK
-```
-
----
-
-## 8. Xóa Task
-
-### Request
-
-```
-DELETE /tasks/{id}
-```
-
-### Response
-
-```
-204 No Content
-```
-
----
-
-## 9. Tìm Task có Priority = HIGH
-
-### Request
-
-```
+```http
 GET /tasks?priority=HIGH
 ```
 
-### Response
+Example
 
-```json
-[
-    {
-        "id":1,
-        "title":"Design API",
-        "priority":"HIGH"
-    }
-]
+```text
+GET /api/v1/tasks?priority=HIGH
 ```
 
 ---
 
-## 10. Tìm Task có Priority = HIGH và User ID = 1
+## Get tasks by priority and assigned user
 
-### Request
-
-```
-GET /tasks?priority=HIGH&userId=1
+```http
+GET /tasks?priority=HIGH&assignedTo=1
 ```
 
-### Response
+Example
 
-```json
-[
-    {
-        "id":1,
-        "title":"Design API",
-        "priority":"HIGH",
-        "userId":1
-    }
-]
+```text
+GET /api/v1/tasks?priority=HIGH&assignedTo=1
 ```
 
 ---
 
-## 11. Liệt kê toàn bộ Task của User
+## Get all tasks of a user
 
-### Request
-
-```
+```http
 GET /users/{id}/tasks
 ```
 
-### Response
+Example
 
-```json
-[
-    {
-        "id":1,
-        "title":"Design API"
-    },
-    {
-        "id":2,
-        "title":"Write Documentation"
-    }
-]
+```text
+GET /api/v1/users/1/tasks
 ```
 
 ---
 
-## 12. Gắn Task cho User
+# 5. Assign Task to User
 
-### Request
+Assign a task to a user.
 
+```http
+PATCH /tasks/{id}/assign
 ```
-PATCH /tasks/{taskId}
-```
 
-### Body
+### Request Body
 
 ```json
 {
-    "userId":2
+  "assignedTo": 1
 }
 ```
 
-### Validation
+Example
 
-- User phải tồn tại.
-- Task phải tồn tại.
-
-### Response
-
-```
-200 OK
+```text
+PATCH /api/v1/tasks/5/assign
 ```
 
 ---
+
+# 6. HTTP Status Codes
+
+| Code            | Meaning            |
+| --------------- | ------------------ |
+| 200 OK          | Request successful |
+| 201 Created     | Resource created   |
+| 204 No Content  | Resource deleted   |
+| 400 Bad Request | Invalid request    |
+| 404 Not Found   | Resource not found |
+
+---
+
+# 7. RESTful Design Rules
+
+* Use plural nouns for resources (`/users`, `/tasks`).
+* Use HTTP Methods correctly (`GET`, `POST`, `PATCH`, `DELETE`).
+* Use Path Variable for resource identifiers.
+* Use Query Parameters for filtering.
+* Use JSON as request/response format.
+* Keep URLs resource-oriented; avoid verbs in endpoint names.
+
+---
+
+# 8. API Summary
+
+| Feature                       | Method | Endpoint                                   |
+| ----------------------------- | ------ | ------------------------------------------ |
+| Get all users                 | GET    | `/users`                                   |
+| Create user                   | POST   | `/users`                                   |
+| Update user role              | PATCH  | `/users/{id}/role`                         |
+| Delete user                   | DELETE | `/users/{id}`                              |
+| Get all tasks                 | GET    | `/tasks`                                   |
+| Create task                   | POST   | `/tasks`                                   |
+| Update task status            | PATCH  | `/tasks/{id}/status`                       |
+| Delete task                   | DELETE | `/tasks/{id}`                              |
+| Find tasks by priority        | GET    | `/tasks?priority=HIGH`                     |
+| Find tasks by priority & user | GET    | `/tasks?priority=HIGH&assignedTo={userId}` |
+| Get tasks of a user           | GET    | `/users/{id}/tasks`                        |
+| Assign task to user           | PATCH  | `/tasks/{id}/assign`                       |
