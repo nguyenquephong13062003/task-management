@@ -79,4 +79,18 @@ public class TaskRepositoryImpl implements ITaskRepository {
         return tasks;
     }
 
+    private Long generateNextId() {
+        return tasks.stream()
+                .map(Task::getId)
+                .max(Long::compareTo)
+                .orElse(0L) + 1;
+    }
+
+    @Override
+    public Task add(Task task) {
+        task.setId(generateNextId());
+        tasks.add(task);
+        return task;
+    }
+
 }

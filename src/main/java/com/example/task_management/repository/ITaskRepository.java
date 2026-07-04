@@ -8,4 +8,5 @@ public interface ITaskRepository {
 
     List<Task> findAll();
 
+    Task add(Task task);
 }
