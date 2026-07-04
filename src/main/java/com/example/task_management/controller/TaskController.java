@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/tasks")
+@RequestMapping("tasks")
 public class TaskController {
 
     private final ITaskService taskService;
