@@ -9,4 +9,10 @@ public interface ITaskRepository {
     List<Task> findAll();
 
     Task add(Task task);
+
+    Task findById(Long id);
+
+    Task save(Long id, Task task);
+
+    Task deleteById(Long id);
 }
