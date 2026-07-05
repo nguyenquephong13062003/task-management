@@ -33,7 +33,7 @@ public class TaskServiceImpl implements ITaskService {
         if (assignedUser == null) {
             return null;
         }
-        return taskRepository.add(task);
+        return taskRepository.save(task);
     }
 
     @Override

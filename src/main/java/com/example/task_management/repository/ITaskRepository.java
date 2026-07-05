@@ -8,7 +8,7 @@ public interface ITaskRepository {
 
     List<Task> findAll();
 
-    Task add(Task task);
+    Task save(Task task);
 
     Task findById(Long id);
 

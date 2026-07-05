@@ -87,7 +87,7 @@ public class TaskRepositoryImpl implements ITaskRepository {
     }
 
     @Override
-    public Task add(Task task) {
+    public Task save(Task task) {
         task.setId(generateNextId());
         tasks.add(task);
         return task;
