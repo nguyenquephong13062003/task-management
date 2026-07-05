@@ -8,4 +8,8 @@ public interface ITaskService {
     List<Task> findAllTasks();
 
     Task createTask(Task task);
+
+    Task updateTask(Long id, Task task);
+
+    Task deleteTask(Long id);
 }

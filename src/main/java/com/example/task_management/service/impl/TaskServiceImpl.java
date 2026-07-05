@@ -36,4 +36,37 @@ public class TaskServiceImpl implements ITaskService {
         return taskRepository.add(task);
     }
 
+    @Override
+    public Task updateTask(Long id, Task task) {
+
+//        Task existingTask = taskRepository.findById(id);
+//
+//        if (existingTask == null) {
+//            return null;
+//        }
+
+        User assignedUser =
+                userService.findUserById(task.getAssignedTo());
+
+        if (assignedUser == null) {
+            return null;
+        }
+
+        return taskRepository.save(id, task);
+
+    }
+
+    @Override
+    public Task deleteTask(Long id) {
+
+//        Task existingTask = taskRepository.findById(id);
+//
+//        if (existingTask == null) {
+//            return null;
+//        }
+
+        return taskRepository.deleteById(id);
+
+    }
+
 }

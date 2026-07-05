@@ -93,4 +93,47 @@ public class TaskRepositoryImpl implements ITaskRepository {
         return task;
     }
 
+    @Override
+    public Task findById(Long id) {
+
+        return tasks.stream()
+                .filter(task -> task.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+    }
+
+    @Override
+    public Task save(Long id, Task task) {
+
+        Task existingTask = findById(id);
+
+        if (existingTask == null) {
+            return null;
+        }
+
+        existingTask.setTitle(task.getTitle());
+        existingTask.setDescription(task.getDescription());
+        existingTask.setPriority(task.getPriority());
+        existingTask.setAssignedTo(task.getAssignedTo());
+
+        return existingTask;
+
+    }
+
+    @Override
+    public Task deleteById(Long id) {
+
+        Task existingTask = findById(id);
+
+        if (existingTask == null) {
+            return null;
+        }
+
+        tasks.remove(existingTask);
+
+        return existingTask;
+
+    }
+
 }

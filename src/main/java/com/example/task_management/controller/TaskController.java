@@ -56,4 +56,39 @@ public class TaskController {
                 .body(createdTask);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTask(
+            @PathVariable Long id,
+            @RequestBody Task task) {
+
+        Task updatedTask = taskService.updateTask(id, task);
+
+        if (updatedTask == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Task not found.");
+        }
+
+        return ResponseEntity.ok(updatedTask);
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(
+            @PathVariable Long id) {
+
+        Task deletedTask = taskService.deleteTask(id);
+
+        if (deletedTask == null) {
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+
+        return ResponseEntity
+                .noContent()
+                .build();
+
+    }
+
 }
