@@ -28,4 +28,35 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findById(id);
     }
 
+    @Override
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User updateUser(Long id, User user) {
+
+//        User existingUser = userRepository.findById(id);
+//
+//        if (existingUser == null) {
+//            return null;
+//        }
+
+        return userRepository.save(id, user);
+
+    }
+
+    @Override
+    public User deleteUser(Long id) {
+
+//        User existingUser = userRepository.findById(id);
+//
+//        if (existingUser == null) {
+//            return null;
+//        }
+
+        return userRepository.deleteById(id);
+
+    }
+
 }

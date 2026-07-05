@@ -9,4 +9,10 @@ public interface IUserRepository {
     List<User> findAll();
 
     User findById(Long id);
+
+    User save(User user);
+
+    User save(Long id, User user);
+
+    User deleteById(Long id);
 }
